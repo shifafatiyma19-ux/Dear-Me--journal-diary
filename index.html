@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<meta name="description"
+      content="DearMe — a cute personal diary for thoughts, goals, memories and moments.">
+
+<meta name="theme-color"
+      content="#e79aaa">
+
+<title>DearMe — My Little Diary</title>
+
+
+<!-- PWA MANIFEST -->
+
+<link rel="manifest"
+      href="manifest.json">
+
+
+<!-- GOOGLE FONTS -->
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =========================
+   COLORS
+========================= */
+
+:root {
+
+    --paper: #fffaf4;
+
+    --pink: #e79aaa;
+
+    --dark-pink: #d96c8a;
+
+    --soft-pink: #fff0f3;
+
+    --text: #333333;
+
+    --muted: #999999;
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8e8ed,
+            #eee8f5
+        );
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 20px;
+
+}
+
+
+/* =========================
+   APP
+========================= */
+
+#app-container {
+
+    width: 390px;
+
+    height: 720px;
+
+    max-width: 100%;
+
+    max-height: calc(100vh - 40px);
+
+    background: var(--paper);
+
+    border: 7px solid white;
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(70, 40, 50, 0.20);
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* =========================
+   STATIC CUTE DOODLES
+========================= */
+
+.doodle {
+
+    position: absolute;
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    user-select: none;
+
+    opacity: 0.65;
+
+}
+
+
+.doodle-1 {
+
+    top: 9px;
+
+    left: 12px;
+
+    color: #e4a0b0;
+
+    font-size: 23px;
+
+    transform: rotate(-15deg);
+
+}
+
+
+.doodle-2 {
+
+    top: 14px;
+
+    right: 14px;
+
+    color: #cba4d5;
+
+    font-size: 28px;
+
+    transform: rotate(12deg);
+
+}
+
+
+.doodle-3 {
+
+    top: 44%;
+
+    left: 7px;
+
+    color: #e0b47e;
+
+    font-size: 19px;
+
+}
+
+
+.doodle-4 {
+
+    top: 57%;
+
+    right: 7px;
+
+    color: #e6a4b4;
+
+    font-size: 23px;
+
+    transform: rotate(10deg);
+
+}
+
+
+.doodle-5 {
+
+    bottom: 78px;
+
+    left: 12px;
+
+    color: #c9a5d4;
+
+    font-size: 20px;
+
+}
+
+
+.doodle-6 {
+
+    bottom: 78px;
+
+    right: 12px;
+
+    color: #d9b07d;
+
+    font-size: 23px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    padding: 17px 20px 14px;
+
+    text-align: center;
+
+    border-bottom:
+        1px dashed #ddd;
+
+    position: relative;
+
+    z-index: 5;
+
+}
+
+
+h1 {
+
+    margin: 0;
+
+    font-family:
+        "Dancing Script",
+        cursive;
+
+    font-size: 37px;
+
+    color: #333;
+
+}
+
+
+.subtitle {
+
+    font-size: 11px;
+
+    color: #aaa;
+
+    margin-top: -2px;
+
+}
+
+
+.page-counter {
+
+    margin-top: 6px;
+
+    font-size: 12px;
+
+    color: #888;
+
+}
+
+
+/* =========================
+   JOURNAL
+========================= */
+
+#journal-content {
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 18px 22px;
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+#photo-slot {
+
+    width: 100%;
+
+    height: 145px;
+
+    border:
+        2px dashed #d9cdd0;
+
+    border-radius: 15px;
+
+    background: #f8f4f3;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    position: relative;
+
+    transition: 0.2s;
+
+}
+
+
+#photo-slot:hover {
+
+    border-color: var(--pink);
+
+    background: #fff7f8;
+
+}
+
+
+#photo-slot img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+}
+
+
+#photo-label {
+
+    color: #999;
+
+    font-size: 13px;
+
+    text-align: center;
+
+}
+
+
+#photo-controls {
+
+    display: none;
+
+    position: absolute;
+
+    right: 30px;
+
+    top: 155px;
+
+    gap: 5px;
+
+    z-index: 20;
+
+}
+
+
+#photo-controls button {
+
+    border: none;
+
+    background:
+        rgba(255,255,255,0.92);
+
+    padding: 5px 9px;
+
+    border-radius: 15px;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+#journal-text {
+
+    width: 100%;
+
+    height: 245px;
+
+    margin-top: 15px;
+
+    padding: 8px 12px;
+
+    background: transparent;
+
+    border: none;
+
+    border-left:
+        2px solid var(--pink);
+
+    outline: none;
+
+    resize: none;
+
+    font-family:
+        "Quicksand",
+        sans-serif;
+
+    font-size: 16px;
+
+    line-height: 1.65;
+
+    color: var(--text);
+
+}
+
+
+#journal-text::placeholder {
+
+    color: #b9b0b2;
+
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+
+    background: white;
+
+    border-top:
+        1px solid #eee;
+
+    padding: 9px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    position: relative;
+
+    z-index: 40;
+
+}
+
+
+.toolbar-title {
+
+    font-size: 11px;
+
+    color: #888;
+
+    font-weight: 600;
+
+}
+
+
+.color-button {
+
+    width: 25px;
+
+    height: 25px;
+
+    border-radius: 50%;
+
+    border: 2px solid white;
+
+    box-shadow:
+        0 2px 5px
+        rgba(0,0,0,0.15);
+
+    cursor: pointer;
+
+}
+
+
+.black {
+
+    background: #222;
+
+}
+
+
+.brown {
+
+    background: #795548;
+
+}
+
+
+.blue {
+
+    background: #5577a8;
+
+}
+
+
+.purple {
+
+    background: #9070aa;
+
+}
+
+
+.pink {
+
+    background: #d96c8a;
+
+}
+
+
+.custom-color {
+
+    width: 27px;
+
+    height: 27px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    position: relative;
+
+    font-size: 16px;
+
+    overflow: hidden;
+
+}
+
+
+#text-color-picker {
+
+    position: absolute;
+
+    width: 40px;
+
+    height: 40px;
+
+    opacity: 0;
+
+    cursor: pointer;
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.nav-buttons {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 9px 13px;
+
+    background: white;
+
+    position: relative;
+
+    z-index: 40;
+
+}
+
+
+.nav-buttons button {
+
+    border:
+        1px solid #e1d9da;
+
+    background: white;
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+}
+
+
+.nav-buttons button:hover {
+
+    background:
+        var(--soft-pink);
+
+    border-color:
+        var(--pink);
+
+}
+
+
+.save-button {
+
+    background:
+        #fff0f3 !important;
+
+    border-color:
+        #f0c4ce !important;
+
+    color:
+        #c75d78;
+
+}
+
+
+/* =========================
+   EXTRA
+========================= */
+
+.extra-actions {
+
+    display: flex;
+
+    justify-content: center;
+
+    padding:
+        0 10px 8px;
+
+    background: white;
+
+}
+
+
+.extra-actions button {
+
+    border: none;
+
+    background: transparent;
+
+    color: #aaa;
+
+    font-size: 10px;
+
+    cursor: pointer;
+
+}
+
+
+.extra-actions button:hover {
+
+    color:
+        var(--dark-pink);
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+#message {
+
+    position: absolute;
+
+    top: 55px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%)
+        translateY(-10px);
+
+    background:
+        rgba(70,55,60,0.92);
+
+    color: white;
+
+    padding:
+        7px 14px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.25s;
+
+    z-index: 100;
+
+}
+
+
+#message.show {
+
+    opacity: 1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 430px) {
+
+    body {
+
+        padding: 0;
+
+        background:
+            var(--paper);
+
+    }
+
+
+    #app-container {
+
+        width: 100%;
+
+        height: 100vh;
+
+        max-height: none;
+
+        border: none;
+
+        border-radius: 0;
+
+        box-shadow: none;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="app-container">
+
+
+<!-- CUTE STATIC DECORATIONS -->
+
+<div class="doodle doodle-1">✿</div>
+
+<div class="doodle doodle-2">♡</div>
+
+<div class="doodle doodle-3">✦</div>
+
+<div class="doodle doodle-4">❀</div>
+
+<div class="doodle doodle-5">♡</div>
+
+<div class="doodle doodle-6">✧</div>
+
+
+<!-- MESSAGE -->
+
+<div id="message"></div>
+
+
+<!-- HEADER -->
+
+<header>
+
+<h1>Dear Me</h1>
+
+<div class="subtitle">
+
+little thoughts • big dreams • memories
+
+</div>
+
+<div class="page-counter">
+
+Page
+
+<span id="current-page">1</span>
+
+of 50
+
+</div>
+
+</header>
+
+
+<!-- JOURNAL -->
+
+<main id="journal-content">
+
+
+<div id="photo-slot"
+     onclick="openPhotoPicker()">
+
+<span id="photo-label">
+
+📸<br>
+
+Tap to add a memory
+
+</span>
+
+</div>
+
+
+<input
+    type="file"
+    id="file-input"
+    hidden
+    accept="image/*"
+>
+
+
+<div id="photo-controls">
+
+<button onclick="changePhoto(event)">
+Change
+</button>
+
+<button onclick="removePhoto(event)">
+Remove
+</button>
+
+</div>
+
+
+<textarea
+    id="journal-text"
+    placeholder="Write your thoughts, dreams, little moments... 💗">
+</textarea>
+
+
+</main>
+
+
+<!-- COLOR TOOLBAR -->
+
+<div class="toolbar">
+
+<span class="toolbar-title">
+Text
+</span>
+
+
+<button
+    class="color-button black"
+    onclick="setTextColor('#222222')">
+</button>
+
+
+<button
+    class="color-button brown"
+    onclick="setTextColor('#795548')">
+</button>
+
+
+<button
+    class="color-button blue"
+    onclick="setTextColor('#5577a8')">
+</button>
+
+
+<button
+    class="color-button purple"
+    onclick="setTextColor('#9070aa')">
+</button>
+
+
+<button
+    class="color-button pink"
+    onclick="setTextColor('#d96c8a')">
+</button>
+
+
+<label class="custom-color">
+
+🎨
+
+<input
+    type="color"
+    id="text-color-picker"
+    value="#222222"
+>
+
+</label>
+
+</div>
+
+
+<!-- NAVIGATION -->
+
+<div class="nav-buttons">
+
+<button onclick="prevPage()">
+
+← Back
+
+</button>
+
+
+<button
+    class="save-button"
+    onclick="savePage()">
+
+💗 Save
+
+</button>
+
+
+<button onclick="nextPage()">
+
+Next →
+
+</button>
+
+</div>
+
+
+<!-- EXTRA -->
+
+<div class="extra-actions">
+
+<button onclick="clearCurrentPage()">
+
+Clear this page
+
+</button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentPage = 1;
+
+const totalPages = 50;
+
+
+const textarea =
+    document.getElementById(
+        "journal-text"
+    );
+
+
+const pageNumber =
+    document.getElementById(
+        "current-page"
+    );
+
+
+const photoSlot =
+    document.getElementById(
+        "photo-slot"
+    );
+
+
+const fileInput =
+    document.getElementById(
+        "file-input"
+    );
+
+
+const photoControls =
+    document.getElementById(
+        "photo-controls"
+    );
+
+
+const colorPicker =
+    document.getElementById(
+        "text-color-picker"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+let messageTimer;
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(text) {
+
+    message.textContent = text;
+
+    message.classList.add("show");
+
+    clearTimeout(messageTimer);
+
+    messageTimer =
+        setTimeout(
+            function() {
+
+                message.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+}
+
+
+/* =========================
+   TEXT COLOR
+========================= */
+
+function setTextColor(color) {
+
+    textarea.style.color =
+        color;
+
+    colorPicker.value =
+        color;
+
+    localStorage.setItem(
+        `dearme-color-${currentPage}`,
+        color
+    );
+
+    savePage(false);
+
+    showMessage(
+        "Text color changed 🎨"
+    );
+}
+
+
+/* =========================
+   PHOTO
+========================= */
+
+function openPhotoPicker() {
+
+    fileInput.click();
+
+}
+
+
+function changePhoto(event) {
+
+    event.stopPropagation();
+
+    fileInput.click();
+
+}
+
+
+fileInput.addEventListener(
+    "change",
+    function(event) {
+
+        const file =
+            event.target.files[0];
+
+        if (!file) return;
+
+
+        if (
+            file.size >
+            5 * 1024 * 1024
+        ) {
+
+            showMessage(
+                "Please choose a photo under 5MB 📸"
+            );
+
+            fileInput.value = "";
+
+            return;
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(e) {
+
+                const imageData =
+                    e.target.result;
+
+                localStorage.setItem(
+                    `dearme-photo-${currentPage}`,
+                    imageData
+                );
+
+                displayPhoto(
+                    imageData
+                );
+
+                showMessage(
+                    "Memory added 📸💗"
+                );
+            };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* =========================
+   DISPLAY PHOTO
+========================= */
+
+function displayPhoto(imageData) {
+
+    photoSlot.innerHTML = "";
+
+    const image =
+        document.createElement(
+            "img"
+        );
+
+    image.src =
+        imageData;
+
+    photoSlot.appendChild(
+        image
+    );
+
+    photoControls.style.display =
+        "flex";
+}
+
+
+/* =========================
+   REMOVE PHOTO
+========================= */
+
+function removePhoto(event) {
+
+    event.stopPropagation();
+
+    localStorage.removeItem(
+        `dearme-photo-${currentPage}`
+    );
+
+    fileInput.value = "";
+
+    photoSlot.innerHTML = `
+
+        <span id="photo-label">
+
+            📸<br>
+
+            Tap to add a memory
+
+        </span>
+
+    `;
+
+    photoControls.style.display =
+        "none";
+
+    showMessage(
+        "Photo removed 🗑️"
+    );
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function savePage(
+    showSavedMessage = true
+) {
+
+    localStorage.setItem(
+        `dearme-page-${currentPage}`,
+        textarea.value
+    );
+
+
+    localStorage.setItem(
+        `dearme-color-${currentPage}`,
+        textarea.style.color
+    );
+
+
+    if (showSavedMessage) {
+
+        showMessage(
+            `Page ${currentPage} saved 💗`
+        );
+
+    }
+
+}
+
+
+/* =========================
+   LOAD PAGE
+========================= */
+
+function updatePage() {
+
+    pageNumber.textContent =
+        currentPage;
+
+
+    textarea.value =
+        localStorage.getItem(
+            `dearme-page-${currentPage}`
+        ) || "";
+
+
+    const savedColor =
+        localStorage.getItem(
+            `dearme-color-${currentPage}`
+        );
+
+
+    textarea.style.color =
+        savedColor || "#222222";
+
+
+    colorPicker.value =
+        savedColor || "#222222";
+
+
+    const savedPhoto =
+        localStorage.getItem(
+            `dearme-photo-${currentPage}`
+        );
+
+
+    if (savedPhoto) {
+
+        displayPhoto(
+            savedPhoto
+        );
+
+    } else {
+
+        photoSlot.innerHTML = `
+
+            <span id="photo-label">
+
+                📸<br>
+
+                Tap to add a memory
+
+            </span>
+
+        `;
+
+        photoControls.style.display =
+            "none";
+
+    }
+
+
+    document
+        .getElementById(
+            "journal-content"
+        )
+        .scrollTop = 0;
+
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+function nextPage() {
+
+    savePage(false);
+
+
+    if (
+        currentPage >=
+        totalPages
+    ) {
+
+        showMessage(
+            "This is the last page 💗"
+        );
+
+        return;
+    }
+
+
+    currentPage++;
+
+    updatePage();
+
+}
+
+
+/* =========================
+   PREVIOUS
+========================= */
+
+function prevPage() {
+
+    savePage(false);
+
+
+    if (
+        currentPage <= 1
+    ) {
+
+        showMessage(
+            "You're already on page 1 🌷"
+        );
+
+        return;
+    }
+
+
+    currentPage--;
+
+    updatePage();
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearCurrentPage() {
+
+    const confirmed =
+        confirm(
+            "Clear everything on this page? 💗"
+        );
+
+
+    if (!confirmed) return;
+
+
+    localStorage.removeItem(
+        `dearme-page-${currentPage}`
+    );
+
+
+    localStorage.removeItem(
+        `dearme-color-${currentPage}`
+    );
+
+
+    localStorage.removeItem(
+        `dearme-photo-${currentPage}`
+    );
+
+
+    textarea.value = "";
+
+    textarea.style.color =
+        "#222222";
+
+    colorPicker.value =
+        "#222222";
+
+
+    fileInput.value = "";
+
+
+    photoSlot.innerHTML = `
+
+        <span id="photo-label">
+
+            📸<br>
+
+            Tap to add a memory
+
+        </span>
+
+    `;
+
+
+    photoControls.style.display =
+        "none";
+
+
+    showMessage(
+        "Page cleared 🌷"
+    );
+
+}
+
+
+/* =========================
+   AUTO SAVE
+========================= */
+
+let autoSaveTimer;
+
+
+textarea.addEventListener(
+    "input",
+    function() {
+
+        clearTimeout(
+            autoSaveTimer
+        );
+
+
+        autoSaveTimer =
+            setTimeout(
+                function() {
+
+                    savePage(false);
+
+                },
+                700
+            );
+
+    }
+);
+
+
+/* =========================
+   COLOR PICKER
+========================= */
+
+colorPicker.addEventListener(
+    "input",
+    function() {
+
+        setTextColor(
+            this.value
+        );
+
+    }
+);
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if (
+    "serviceWorker"
+    in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            navigator.serviceWorker
+                .register(
+                    "./service-worker.js"
+                )
+                .then(
+                    function() {
+
+                        console.log(
+                            "DearMe service worker registered 💗"
+                        );
+
+                    }
+                )
+                .catch(
+                    function(error) {
+
+                        console.log(
+                            "Service worker error:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+updatePage();
+
+</script>
+
+
+</body>
+
+</html>
